@@ -8,6 +8,7 @@ N = 100
 k = 4
 p = 0.5
 
+# Use Watts Strogatz model to generate small world graph (?)
 G_WS = nx.watts_strogatz_graph(N, k, p)
 
 

@@ -1,0 +1,8 @@
+README.md
+setup.py
+SIR_Network_Simulation/__init__.py
+SIR_Network_Simulation/simulation.py
+SIR_Network_Simulation.egg-info/PKG-INFO
+SIR_Network_Simulation.egg-info/SOURCES.txt
+SIR_Network_Simulation.egg-info/dependency_links.txt
+SIR_Network_Simulation.egg-info/top_level.txt

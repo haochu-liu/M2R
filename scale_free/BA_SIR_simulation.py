@@ -4,7 +4,7 @@ import numpy as np
 import networkx as nx
 
 
-N = 1000
+N = 100
 L = 4
 
 G_BA = nx.barabasi_albert_graph(N, L)

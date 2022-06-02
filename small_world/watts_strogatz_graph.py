@@ -10,6 +10,7 @@ p = 0.5
 
 # Use Watts Strogatz model to generate small world graph (?)
 G_WS = nx.watts_strogatz_graph(N, k, p)
+G_np = nx.gnp_random_graph(N, 0.05)
 
 
 def plot_graph(G):
@@ -26,6 +27,7 @@ def verify_small_world(G):
     print("ln(N)/ln<k>:", ln(N) / ln(k_mean))
 
 
-S = Simulation(G_WS, 0.2, 0.1)
-S.infect_list([i for i in range(3)])
-S.continuous_display()
+verify_small_world(G_np)
+# S = Simulation(G_WS, 0.2, 0.1)
+# S.infect_list([i for i in range(3)])
+# S.continuous_display()

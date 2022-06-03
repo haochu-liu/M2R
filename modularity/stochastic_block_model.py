@@ -5,7 +5,7 @@ import numpy as np
 from scipy.linalg import eigh
 
 sizes = [40, 60]
-probs = [[0.2, 0.01], [0.01, 0.2]]
+probs = [[0.2, 0.002], [0.002, 0.2]]
 
 G_sb = nx.stochastic_block_model(sizes, probs)
 
@@ -39,6 +39,6 @@ def greedy_modularity(G):
     return cGreedy
 
 
-S = Simulation(G_sb, 0.2, 0.1)
+S = Simulation(G_sb, 0.05, 0.05)
 S.infect_list([i for i in range(2)])
 S.continuous_display()

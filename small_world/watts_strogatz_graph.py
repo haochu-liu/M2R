@@ -28,7 +28,7 @@ def verify_small_world(G):
 
 
 def avg_clustering(N, k):
-    p = np.linspace(0, 0.01, num=501)
+    p = np.logspace(-5, 0, num=21)
     ret = []
     for i in p:
         G = nx.watts_strogatz_graph(N, k, i, seed=1)
@@ -38,7 +38,7 @@ def avg_clustering(N, k):
 
 
 def global_clustering(N, k):
-    p = np.linspace(0, 0.01, num=501)
+    p = np.logspace(-5, 0, num=21)
     ret = []
     for i in p:
         G = nx.watts_strogatz_graph(N, k, i, seed=1)
@@ -51,7 +51,7 @@ def global_clustering(N, k):
 
 
 def avg_distance(N, k):
-    p = np.linspace(0, 0.01, num=501)
+    p = np.logspace(-5, 0, num=21)
     ret = []
     for i in p:
         G = nx.watts_strogatz_graph(N, k, i, seed=1)
@@ -61,7 +61,7 @@ def avg_distance(N, k):
 
 
 def diameter(N, k):
-    p = np.linspace(0, 0.01, num=501)
+    p = np.logspace(-5, 0, num=21)
     ret = []
     for i in p:
         G = nx.watts_strogatz_graph(N, k, i, seed=1)
@@ -71,15 +71,14 @@ def diameter(N, k):
 
 
 avg_clustering = avg_clustering(N, k)
-# global_clustering = global_clustering(N, k)
+avg_clustering_div = [i / avg_clustering[0] for i in avg_clustering]
 avg_distance = avg_distance(N, k)
-# diameter = diameter(N, k)
-p = np.linspace(0, 0.01, num=501)
+avg_distance_div = [i / avg_distance[0] for i in avg_distance]
+p = np.logspace(-5, 0, num=21)
 
-plt.plot(p, avg_clustering, label='avg clustering')
-# plt.plot(p, global_clustering, label='global clustering')
-plt.plot(p, avg_distance, label='avg distance')
-# plt.plot(p, diameter, label='diameter')
+plt.plot(p, avg_clustering_div, label='avg clustering')
+plt.plot(p, avg_distance_div, label='avg distance')
+plt.xscale('log')
 plt.xlabel('p')
 plt.legend()
 plt.show()

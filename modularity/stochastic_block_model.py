@@ -40,7 +40,7 @@ def greedy_modularity(G):
     return cGreedy
 
 
-plot_graph(G_sb)
+# plot_graph(G_sb)
 
 # S = Simulation(G_sb, 0.05, 0.05)
 # S.infect_list([i for i in range(2)])

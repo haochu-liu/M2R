@@ -11,8 +11,9 @@ G_sb = nx.stochastic_block_model(sizes, probs)
 
 
 def plot_graph(G):
+    col = ['blue' for i in range(40)] + ['red' for i in range(60)]
     plt.figure(1)
-    nx.draw(G, node_size=6)
+    nx.draw(G, node_size=50, node_color=col)
     plt.show()
 
 
@@ -39,6 +40,8 @@ def greedy_modularity(G):
     return cGreedy
 
 
-S = Simulation(G_sb, 0.05, 0.05)
-S.infect_list([i for i in range(2)])
-S.continuous_display()
+plot_graph(G_sb)
+
+# S = Simulation(G_sb, 0.05, 0.05)
+# S.infect_list([i for i in range(2)])
+# S.continuous_display()

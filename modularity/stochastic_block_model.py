@@ -4,14 +4,14 @@ import networkx as nx
 import numpy as np
 from scipy.linalg import eigh
 
-sizes = [40, 60]
-probs = [[0.2, 0.002], [0.002, 0.2]]
+sizes = [50, 50]
+probs = [[0.1, 0.001], [0.001, 0.1]]
 
 G_sb = nx.stochastic_block_model(sizes, probs)
 
 
 def plot_graph(G):
-    col = ['blue' for i in range(40)] + ['red' for i in range(60)]
+    col = ['blue' for i in range(50)] + ['red' for i in range(50)]
     plt.figure(1)
     nx.draw(G, node_size=50, node_color=col)
     plt.show()

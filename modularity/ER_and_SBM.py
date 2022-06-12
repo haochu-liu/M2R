@@ -1,68 +1,79 @@
 import networkx as nx
 import EoN
-import random
 import numpy as np
-import scipy.stats as stats
-from math import sqrt
 import matplotlib.pyplot as plt
 
 N = 500
-n = N / 2
-sizes = [int(n), int(n)]
-p_SBM = 0.1
-k_SBM = [0.1, 0.01, 0.001]
-prob_SBM = [[[p_SBM, k*p_SBM], [k*p_SBM, p_SBM]] for k in k_SBM]
-prob_ER = p_SBM
+p_er = 0.01
+l = N*(N-1)*p_er/2
 
 
-def sir(G, r):
-    initial_size = random.randint(0, N)
-    tau = 1.
-    gamma = r * tau
-    t, S, I, R = EoN.fast_SIR(G, tau, gamma,
-                              initial_infecteds=initial_size,
-                              tmax=100)
-    return t, S
+def p_2_sbm(N, r):
+    n = N / 2
+    sizes = [int(n), int(n)]
+    p = l / (n*n*r + n*(n-1))
+    return sizes, [[p, r*p], [r*p, p]]
 
 
-def find_t(t, S):
-    i = 0
-    while S[i]/N >= 0.75:
-        i += 1
-        if i >= len(S):
-            return None
-    return t[i]
+def p_3_sbm(N, r):
+    n = N / 3
+    sizes = [int(n), int(n), int(n)]
+    p = l / (3*r*n*n + 3*n*(n-1)/2)
+    return sizes, [[p, r*p, r*p], [r*p, p, r*p], [r*p, r*p, p]]
 
 
-d_SBM = [[] for i in range(len(k_SBM))]
-d_ER = []
-r = 0.1
-
-for n in range(100):
-    G = nx.gnp_random_graph(N, prob_ER)
-    t, S = sir(G, r)
-    if find_t(t, S):
-        d_ER.append(find_t(t, S))
-
-for i in range(len(k_SBM)):
-    for n in range(100):
-        G = nx.stochastic_block_model(sizes, prob_SBM[i])
-        t, S = sir(G, r)
-        if find_t(t, S):
-            d_SBM[i].append(find_t(t, S))
+def p_4_sbm(N, r):
+    n = N / 4
+    sizes = [int(n), int(n), int(n), int(n)]
+    p = l / (6*r*n*n + 2*n*(n-1))
+    return sizes, [[p, r*p, r*p, r*p], [r*p, p, r*p, r*p], [r*p, r*p, p, r*p], [r*p, r*p, r*p, p]]
 
 
-plt.hist(d_ER, bins=10, color='c', edgecolor='k', alpha=0.5, density=True)
-plt.axvline(x=np.mean(d_SBM[0]))
-plt.axvline(x=np.mean(d_SBM[1]))
-plt.axvline(x=np.mean(d_SBM[2]))
+def sir_t(G, t):
+    tau = 0.05
+    gamma = 0.05
+    full_data = EoN.fast_SIR(G, tau, gamma,
+                             tmax=10,
+                             return_full_data=True)
+    s = 0
+    for i in range(N):
+        if full_data.node_status(i, t) != 'S':
+            s += 1
+    return s/N
 
-mu = np.mean(d_ER)
-var = np.var(d_ER)
-x = np.linspace(0, np.mean(d_SBM[2]), 500)
-y = stats.norm.pdf(x, loc=mu, scale=sqrt(var))
-plt.plot(x, y)
+
+list_r = np.logspace(-4, 0, base=10.0, num=51)
+# n_er = []
+n_sbm = []
+r_sbm = []
+n_m_sbm = []
+r_m_sbm = []
+n_v_sbm = []
+t = 10.0
+
+# for i in range(20):
+#     G = nx.gnp_random_graph(N, p_er)
+#     s = sir_t(G, t)
+#     n_er.append(s)
+
+for r in list_r:
+    sizes, p = p_4_sbm(N, r)
+    list_s = []
+    for i in range(50):
+        G = nx.stochastic_block_model(sizes, p)
+        s = sir_t(G, t)
+        list_s.append(s)
+        n_sbm.append(s)
+        r_sbm.append(np.log10(r))
+    r_m_sbm.append(np.log10(r))
+    n_m_sbm.append(np.mean(list_s))
+    n_v_sbm.append(np.std(list_s))
+
+plt.scatter(r_sbm, n_sbm, alpha=0.25)
+plt.plot(r_m_sbm, n_m_sbm, 'b', linestyle=':')
+plt.xlabel('ln(p2/p1)')
+plt.ylabel('Infected or recovered nodes')
 plt.show()
-print(stats.norm.cdf(np.mean(d_SBM[0]), loc=mu, scale=sqrt(var)))
-print(stats.norm.cdf(np.mean(d_SBM[1]), loc=mu, scale=sqrt(var)))
-print(stats.norm.cdf(np.mean(d_SBM[2]), loc=mu, scale=sqrt(var)))
+
+plt.plot(r_m_sbm, n_v_sbm)
+plt.show()

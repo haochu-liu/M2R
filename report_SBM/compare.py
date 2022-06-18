@@ -149,31 +149,31 @@ r_m_sbm = []
 for r in list_r:
     sizes, p = p_2_sbm(N, r)
     sum_n = 0
-    for i in range(50):
+    for i in range(100):
         G = nx.stochastic_block_model(sizes, p)
         S = Simulation(G=G, N=N, inf_rate=0.05, rec_rate=0.05)
         S.initialise_population([random.randint(0, 249) for i in range(5)])
         n = S.get_final_proportions()
         sum_n += n
     r_m_sbm.append(np.log10(r))
-    n1_m_sbm.append(sum_n / 50.0)
+    n1_m_sbm.append(sum_n / 100.0)
 
 for r in list_r:
     sizes, p = p_2_sbm(N, r)
     sum_n = 0
-    for i in range(50):
+    for i in range(100):
         G = nx.stochastic_block_model(sizes, p)
         S = Simulation(G=G, N=N, inf_rate=0.5, rec_rate=0.05)
         S.initialise_population([random.randint(0, 249) for i in range(5)])
         n = S.get_final_proportions()
         sum_n += n
-    n2_m_sbm.append(sum_n / 50.0)
+    n2_m_sbm.append(sum_n / 100.0)
 
 
-plt.plot(r_m_sbm, n1_m_sbm, 'b', label='beta = 0.05')
-plt.plot(r_m_sbm, n2_m_sbm, 'g', label='beta = 0.5')
+plt.plot(r_m_sbm, n1_m_sbm, 'b', label='α = 0.05')
+plt.plot(r_m_sbm, n2_m_sbm, 'g', label='α = 0.5')
 plt.xlabel('log(q/p)')
-plt.ylabel('Final recovered nodes')
+plt.ylabel('Proportion of population affected by illness')
 plt.legend(loc='best')
 plt.ylim([0.0, 1.0])
 plt.show()

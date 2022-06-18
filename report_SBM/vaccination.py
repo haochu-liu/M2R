@@ -163,35 +163,38 @@ def p_2_sbm(N, r):
 n_sbm = [[], [], []]
 sizes, p = p_2_sbm(N, r)
 
-for i in range(100):
+for i in range(1000):
     G = nx.stochastic_block_model(sizes, p)
     S = Simulation(G=G, N=N, inf_rate=0.05, rec_rate=0.05, vacc_inf_rate=0.005)
     S.initialise_population([random.randint(0, 249) for i in range(5)])
     S.no_vaccines()
     n = S.get_final_proportions()
     n_sbm[0].append(n)
+    print(i)
 
-for i in range(100):
+for i in range(1000):
     G = nx.stochastic_block_model(sizes, p)
     S = Simulation(G=G, N=N, inf_rate=0.05, rec_rate=0.05, vacc_inf_rate=0.005)
     S.initialise_population([random.randint(0, 249) for i in range(5)])
     S.vaccinate_randomly()
     n = S.get_final_proportions()
     n_sbm[1].append(n)
+    print(i)
 
-for i in range(100):
+for i in range(1000):
     G = nx.stochastic_block_model(sizes, p)
     S = Simulation(G=G, N=N, inf_rate=0.05, rec_rate=0.05, vacc_inf_rate=0.005)
     S.initialise_population([random.randint(0, 249) for i in range(5)])
     S.vaccinate_edge_nodes()
     n = S.get_final_proportions()
     n_sbm[2].append(n)
+    print(i)
 
 
 print(np.mean(n_sbm[0]), np.mean(n_sbm[1]), np.mean(n_sbm[2]))
 
 fig, ax = plt.subplots()
 ax.boxplot(n_sbm)
-plt.xticks([1, 2, 3], ['no vaccines', 'vaccinate randomly', 'vaccinate edge nodes'])
-plt.ylabel('Final recovered nodes')
+plt.xticks([1, 2, 3], ['No Vaccination', 'Random Vaccination', 'Targeted Vaccination'])
+plt.ylabel('Proportion of population affected by illness')
 plt.show()

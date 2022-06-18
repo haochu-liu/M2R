@@ -149,12 +149,12 @@ r_m_sbm = []
 n_v_sbm = []
 
 for r in list_r:
-    sizes, p = p_2_sbm(N, r)
+    sizes, p = p_4_sbm(N, r)
     list_n = []
     for i in range(50):
         G = nx.stochastic_block_model(sizes, p)
         S = Simulation(G=G, N=N, inf_rate=0.05, rec_rate=0.05)
-        S.initialise_population([random.randint(0, 249) for i in range(5)])
+        S.initialise_population([random.randint(0, 124) for i in range(5)])
         n = S.get_final_proportions()
         list_n.append(n)
         n_sbm.append(n)
@@ -166,11 +166,11 @@ for r in list_r:
 plt.scatter(r_sbm, n_sbm, alpha=0.25)
 plt.plot(r_m_sbm, n_m_sbm, 'b', linestyle=':', label='mean value')
 plt.xlabel('log(q/p)')
-plt.ylabel('Final recovered nodes')
+plt.ylabel('Proportion of population affected by illness')
 plt.legend(loc='best')
 plt.show()
 
 plt.plot(r_m_sbm, n_v_sbm)
 plt.xlabel('log(q/p)')
-plt.ylabel('standard variance')
+plt.ylabel('Proportion of population affected by illness')
 plt.show()
